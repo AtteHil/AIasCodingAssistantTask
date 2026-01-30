@@ -1,0 +1,64 @@
+** Create Booking (Should pass)
+curl -X POST http://localhost:3000/bookings/roomA \
+  -H "Content-Type: application/json" \
+  -d '{
+    "startTime": "2026-02-01T10:00:00Z",
+    "endTime": "2026-02-01T11:00:00Z"
+  }'
+
+** List bookings for a room (if ran after above should get reservation)
+
+curl http://localhost:3000/bookings/roomA
+
+
+** Cancel a booking (Should pass)
+curl -X DELETE http://localhost:3000/bookings/roomA/<BOOKING_ID>
+
+Create overlapping booking (Should fail)
+curl -X POST http://localhost:3000/bookings/roomA \
+  -H "Content-Type: application/json" \
+  -d '{
+    "startTime": "2026-02-01T10:30:00Z",
+    "endTime": "2026-02-01T11:30:00Z"
+  }'
+
+** Create overlapping booking (Second reservation should fail and send { "error": "Huone on jo varattu kyseiselle ajalle"})
+curl -X POST http://localhost:3000/bookings/roomA \
+  -H "Content-Type: application/json" \
+  -d '{
+    "startTime": "2026-02-01T10:30:00Z",
+    "endTime": "2026-02-01T11:30:00Z"
+  }'
+curl -X POST http://localhost:3000/bookings/roomA \
+  -H "Content-Type: application/json" \
+  -d '{
+    "startTime": "2026-02-01T10:30:00Z",
+    "endTime": "2026-02-01T11:30:00Z"
+  }'
+
+
+** Create booking in the past (Should fail and send {  "error": "Varaus ei voi olla menneisyydessä"}) 
+curl -X POST http://localhost:3000/bookings/roomA \
+  -H "Content-Type: application/json" \
+  -d '{
+    "startTime": "2020-01-01T10:00:00Z",
+    "endTime": "2020-01-01T11:00:00Z"
+  }'
+
+
+** Start time after end time (Should fail and send {  "error": "Aloitusajan täytyy olla ennen lopetusaikaa"})
+
+curl -X POST http://localhost:3000/bookings/roomA \
+  -H "Content-Type: application/json" \
+  -d '{
+    "startTime": "2026-02-01T12:00:00Z",
+    "endTime": "2026-02-01T11:00:00Z"
+  }'
+
+
+** Cancel non-existing booking (Should fail and send {  "error": "Varausta ei löytynyt"})
+curl -X DELETE http://localhost:3000/bookings/roomA/does-not-exist
+
+
+List bookings for empty room (Should send empty array)
+curl http://localhost:3000/bookings/roomB
