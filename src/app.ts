@@ -1,5 +1,6 @@
 // src/app.ts
 import express from "express";
+import { Request, Response, NextFunction } from "express";
 import bookings from "./routes/bookings";
 import { ApiError } from "./utils/errors";
 
@@ -8,7 +9,7 @@ app.use(express.json());
 
 app.use("/bookings", bookings);
 
-app.use((err: any, req: any, res: any, next: any) => {
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   if (err instanceof ApiError) {
     return res.status(err.status).json({ error: err.message });
   }
