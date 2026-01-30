@@ -1,16 +1,18 @@
 // src/routes/bookings.ts
 import express from "express";
 import { createBooking, cancelBooking, listBookings } from "../services/bookingService";
-
+import { parseUtcDate } from "../utils/date";
 const router = express.Router();
 
 router.post("/:roomId", async (req, res, next) => {
   try {
-    const { startTime, endTime } = req.body;
+    const startTime = parseUtcDate(req.body.startTime);
+    const endTime = parseUtcDate(req.body.endTime);
+
     const booking = await createBooking(
       req.params.roomId,
-      new Date(startTime),
-      new Date(endTime)
+      startTime,
+      endTime
     );
     res.status(201).json(booking);
   } catch (err) {

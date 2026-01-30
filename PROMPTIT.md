@@ -6,3 +6,5 @@ Mitä frameworkkeja tarvitaan ratkaisun ajamiseen ja mitä tulee olla asennettun
 Prompt 3:
 Voitko antaa minulle valmiit testaus kutsut, joilla testaan jokaisen ominaisuuden toimivuuden
 
+Prompt 4:
+Järjestelmässä olisi hyvä tarkistaa, että API:in lähetetään aika oikeassa muodossa. Haluan sen olevan UTC muodossa.
